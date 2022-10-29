@@ -1,0 +1,51 @@
+Index,Region,Abbr
+1,Middle cerebellar peduncle,Middle_cerebellar_peduncle
+2,Pontine crossing tract (a part of MCP),Pontine_crossing_tract_(a_part_of_MCP)
+3,Genu of corpus callosum,Genu_of_corpus_callosum
+4,Body of corpus callosum,Body_of_corpus_callosum
+5,Splenium of corpus callosum,Splenium_of_corpus_callosum
+6,Fornix (column and body of fornix),Fornix_(column_and_body_of_fornix)
+7,Corticospinal tract R,Corticospinal_tract_R
+8,Corticospinal tract L,Corticospinal_tract_L
+9,Medial lemniscus R,Medial_lemniscus_R
+10,Medial lemniscus L,Medial_lemniscus_L
+11,Inferior cerebellar peduncle R,Inferior_cerebellar_peduncle_R
+12,Inferior cerebellar peduncle L,Inferior_cerebellar_peduncle_L
+13,Superior cerebellar peduncle R,Superior_cerebellar_peduncle_R
+14,Superior cerebellar peduncle L,Superior_cerebellar_peduncle_L
+15,Cerebral peduncle R,Cerebral_peduncle_R
+16,Cerebral peduncle L,Cerebral_peduncle_L
+17,Anterior limb of internal capsule R,Anterior_limb_of_internal_capsule_R
+18,Anterior limb of internal capsule L,Anterior_limb_of_internal_capsule_L
+19,Posterior limb of internal capsule R,Posterior_limb_of_internal_capsule_R
+20,Posterior limb of internal capsule L,Posterior_limb_of_internal_capsule_L
+21,Retrolenticular part of internal capsule R,Retrolenticular_part_of_internal_capsule_R
+22,Retrolenticular part of internal capsule L,Retrolenticular_part_of_internal_capsule_L
+23,Anterior corona radiata R,Anterior_corona_radiata_R
+24,Anterior corona radiata L,Anterior_corona_radiata_L
+25,Superior corona radiata R,Superior_corona_radiata_R
+26,Superior corona radiata L,Superior_corona_radiata_L
+27,Posterior corona radiata R,Posterior_corona_radiata_R
+28,Posterior corona radiata L,Posterior_corona_radiata_L
+29,Posterior thalamic radiation (include optic radiation) R,Posterior_thalamic_radiation_(include_optic_radiation)_R
+30,Posterior thalamic radiation (include optic radiation) L,Posterior_thalamic_radiation_(include_optic_radiation)_L
+31,Sagittal stratum (include inferior longitidinal fasciculus and inferior fronto-occipital fasciculus) R,Sagittal_stratum_(include_inferior_longitidinal_fasciculus_and_inferior_fronto-occipital_fasciculus)_R
+32,Sagittal stratum (include inferior longitidinal fasciculus and inferior fronto-occipital fasciculus) L,Sagittal_stratum_(include_inferior_longitidinal_fasciculus_and_inferior_fronto-occipital_fasciculus)_L
+33,External capsule R,External_capsule_R
+34,External capsule L,External_capsule_L
+35,Cingulum (cingulate gyrus) R,Cingulum_(cingulate_gyrus)_R
+36,Cingulum (cingulate gyrus) L,Cingulum_(cingulate_gyrus)_L
+37,Cingulum (hippocampus) R,Cingulum_(hippocampus)_R
+38,Cingulum (hippocampus) L,Cingulum_(hippocampus)_L
+39,Fornix (cres) / Stria terminalis (can not be resolved with current resolution) R,Fornix_(cres)_or_Stria_terminalis_(can_not_be_resolved_with_current_resolution)_R
+40,Fornix (cres) / Stria terminalis (can not be resolved with current resolution) L,Fornix_(cres)_or_Stria_terminalis_(can_not_be_resolved_with_current_resolution)_L
+41,Superior longitudinal fasciculus R,Superior_longitudinal_fasciculus_R
+42,Superior longitudinal fasciculus L,Superior_longitudinal_fasciculus_L
+43,Superior fronto-occipital fasciculus (could be a part of anterior internal capsule) R,Superior_fronto-occipital_fasciculus_(could_be_a_part_of_anterior_internal_capsule)_R
+44,Superior fronto-occipital fasciculus (could be a part of anterior internal capsule) L,Superior_fronto-occipital_fasciculus_(could_be_a_part_of_anterior_internal_capsule)_L
+45,Inferior fronto-occipital fasciculus R,Inferior_fronto-occipital_fasciculus_R
+46,Inferior fronto-occipital fasciculus L,Inferior_fronto-occipital_fasciculus_L
+47,Uncinate fasciculus R,Uncinate_fasciculus_R
+48,Uncinate fasciculus L,Uncinate_fasciculus_L
+49,Tapetum R,Tapetum_R
+50,Tapetum L,Tapetum_L

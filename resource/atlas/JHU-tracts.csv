@@ -1,0 +1,21 @@
+Index,Region,Abbr
+1,Anterior thalamic radiation L,ATRL
+2,Anterior thalamic radiation R,ATRR
+3,Corticospinal tract L,CSTL
+4,Corticospinal tract R,CSTR
+5,Cingulum (cingulate gyrus) L,CCL
+6,Cingulum (cingulate gyrus) R,CCR
+7,Cingulum (hippocampus) L,CHL
+8,Cingulum (hippocampus) R,CHR
+9,Forceps major,FMA
+10,Forceps minor,FMI
+11,Inferior fronto-occipital fasciculus L,IFOFL
+12,Inferior fronto-occipital fasciculus R,IFOFR
+13,Inferior longitudinal fasciculus L,ILFL
+14,Inferior longitudinal fasciculus R,ILFR
+15,Superior longitudinal fasciculus L,SLFL
+16,Superior longitudinal fasciculus R,SLFR
+17,Uncinate fasciculus L,UFL
+18,Uncinate fasciculus R,UFR
+19,Superior longitudinal fasciculus (temporal part) L,SLFtL
+20,Superior longitudinal fasciculus (temporal part) R,SLFtR
