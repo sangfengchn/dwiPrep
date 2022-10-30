@@ -33,10 +33,12 @@ for i in glob(opj(derTt, 'sub-*')):
     tmpKey = re.sub(r'[a-zA-Z]', '', tmpKey)
     subIdKey[f'TT{tmpKey}'] = os.path.abspath(i)
 # logging.info(subIdKey)
+prefix = 'MD'
+# tbssPath = opj(proj, 'derivatives', 'tbss_fa', 'data', prefix)
+tbssPath = opj(proj, 'derivatives', 'tbss_fa', 'data', f'{prefix}t')
 
-tbssPath = opj(proj, 'derivatives', 'tbss_fa')
 if not os.path.exists(tbssPath):
-    os.makedirs(opj(tbssPath, 'data'))
+    os.makedirs(tbssPath)
 
 df = df.set_index('MRINumber')
 newDf = []
@@ -46,10 +48,11 @@ for k, v in subIdKey.items():
         tmpGroup = df.loc[k, 'GROUP']
         tmpPath = f'G{tmpGroup}_{df.loc[k, "Number"]}.nii.gz'
         logging.info(tmpPath)
-        shutil.copyfile(opj(v, 'dtifit_FA_mni.nii.gz'), opj(tbssPath, 'data', tmpPath))
+        # shutil.copyfile(opj(v, f'dtifit_{prefix}.nii.gz'), opj(tbssPath, tmpPath))
+        shutil.copyfile(opj(v, f'fwc_wls_dti_{prefix}.nii.gz'), opj(tbssPath, tmpPath))
         newDf.append(k)
 newDf = pd.DataFrame({'MRINumber': newDf})
 newDf = newDf.set_index('MRINumber')
 df = newDf.join(df, how = 'left', on = 'MRINumber')
-df.to_csv(opj(tbssPath, 'participants.csv'))
+# df.to_csv(opj(tbssPath, 'participants.csv'))
 logging.info('Done.')

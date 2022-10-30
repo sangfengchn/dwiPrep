@@ -25,4 +25,11 @@ tbss_1_preproc *.nii.gz
 # # step: 4
 # tbss_4_prestats 0.2
 
+# # step: 5, non fa map
+# tbss_non_FA MD
+# tbss_non_FA L1
+# tbss_non_FA RD
+# tbss_non_FA FAt
+# tbss_non_FA MDt
+
 echo 'Done.'
