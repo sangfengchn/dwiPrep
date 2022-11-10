@@ -17,12 +17,12 @@ bval = []
 bvec = []
 nSample = 0
 for i in sorted(glob(opj(subPath, 'dwi', '*.bval'))):
-    logging.info(i)
+    # logging.info(i)
     bval.append(np.loadtxt(i))
     bvec.append(np.loadtxt(i.replace('.bval', '.bvec')))
     nSample += bval[-1].shape[0]
-    logging.info(bval[-1].shape)
-    logging.info(bvec[-1].shape)
+    # logging.info(bval[-1].shape)
+    # logging.info(bvec[-1].shape)
 
 bvalComb = np.zeros(shape = [1, nSample])
 bvecComb = np.zeros(shape = [3, nSample])

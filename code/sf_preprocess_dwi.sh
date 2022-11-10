@@ -1,12 +1,13 @@
 #! /bin/bash
-# set -exu
-set -u
+set -exu
+# set -u
 
 # PROJ=/Users/fengsang/Library/CloudStorage/OneDrive-mail.bnu.edu.cn/Learning/L_task-dmri
 # PROJ=/home/feng/Desktop/Projects/L_task-dmri
-PROJ=/brain/zhanjunzhang/Desktop/LIZIlin/HTN_duration/derivatives
-RAWPATH=$PROJ/test
-DERPATH=$PROJ/preprocess
+# PROJ=/brain/zhanjunzhang/Desktop/LIZIlin/HTN_duration/derivatives
+PROJ=/brain/babri_group/Desktop/LIUChen/SES
+RAWPATH=$PROJ/SES_BIDS
+DERPATH=$PROJ/derivatives/preprocess_dwi
 RESOURCE=$PROJ/resource
 SIMGPYTHON=$RESOURCE/toolbox/envpy39.simg
 
@@ -19,10 +20,12 @@ do
     
     # check where there is dwi folder
     [ ! -d $subPath/dwi ] && echo "No dwi: sub-${subId}" && continue
+    [ ! -f $subPath/anat/*_T1w.nii.gz ] && echo "No T1w: $subId" && continue
 
     # mkdir derivatives folder
     subDerPath=$DERPATH/sub-$subId
-    [ -d $subDerPath ] && continue
+    # [ -d $subDerPath ] && continue
+    [ -f $subDerPath/tracks_filtered.trk ] && continue
     [ ! -d $subDerPath ] && mkdir -p $subDerPath
 
     # >>>>>>>>>>>>>>>> preprocessing <<<<<<<<<<<<<<<<<<<<
@@ -51,7 +54,6 @@ do
 
     ## >>>>>>>>>>>>>>>>> VBM & ROI <<<<<<<<<<<<<<<<<<<<<<<<<
     # t1w-version: t1w needed in this step
-    [ ! -f $subPath/anat/*_T1w.nii.gz ] && echo "No T1w: $subId" && continue
     # preprocess t1w
     [ -f $subPath/anat/sub-${subId}_T1w.nii.gz ] && cp $subPath/anat/sub-${subId}_T1w.nii.gz $subDerPath/t1w.nii.gz
     robustfov -v -i $subDerPath/t1w.nii.gz -r $subDerPath/t1w.nii.gz
@@ -111,41 +113,40 @@ do
     flirt -in $subDerPath/jhu-icbm-tracts.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/jhu-icbm-tracts.nii.gz -interp nearestneighbour
 
 
-    # # >>>>>>>>>>>>>>>>>>> free water <<<<<<<<<<<<<<<<<
-    singularity exec $SIMGPYTHON python $RESOURCE/toolbox/scripts_FW_CONSORTIUM/fw_mrn.py $subDerPath/dwi.nii.gz $subDerPath/b0_brain_mask.nii.gz $subDerPath/dwi.bval $subDerPath/dwi.bvec $subDerPath
+    # # # >>>>>>>>>>>>>>>>>>> free water <<<<<<<<<<<<<<<<<
+    # singularity exec $SIMGPYTHON python $RESOURCE/toolbox/scripts_FW_CONSORTIUM/fw_mrn.py $subDerPath/dwi.nii.gz $subDerPath/b0_brain_mask.nii.gz $subDerPath/dwi.bval $subDerPath/dwi.bvec $subDerPath
     
-    flirt -in $subDerPath/fwc_wls_dti_FA.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/fwc_wls_dti_FA_mni.nii.gz
-    applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/fwc_wls_dti_FA_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/fwc_wls_dti_FA_mni.nii.gz
+    # flirt -in $subDerPath/fwc_wls_dti_FA.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/fwc_wls_dti_FA_mni.nii.gz
+    # applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/fwc_wls_dti_FA_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/fwc_wls_dti_FA_mni.nii.gz
 
-    flirt -in $subDerPath/fwc_wls_dti_MD.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/fwc_wls_dti_MD_mni.nii.gz
-    applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/fwc_wls_dti_MD_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/fwc_wls_dti_MD_mni.nii.gz
+    # flirt -in $subDerPath/fwc_wls_dti_MD.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/fwc_wls_dti_MD_mni.nii.gz
+    # applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/fwc_wls_dti_MD_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/fwc_wls_dti_MD_mni.nii.gz
 
-    flirt -in $subDerPath/wls_dti_FW.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/wls_dti_FW_mni.nii.gz
-    applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/wls_dti_FW_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/wls_dti_FW_mni.nii.gz
+    # flirt -in $subDerPath/wls_dti_FW.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/wls_dti_FW_mni.nii.gz
+    # applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/wls_dti_FW_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/wls_dti_FW_mni.nii.gz
 
 
     # >>>>>>>>>>>>>>>>>> Tractogram <<<<<<<<<<<<<<<<<
     #解算张量用于纤维追踪
-    $RESOURCE/toolbox/dtk/dti_recon $subDerPath/dwi.nii.gz $subDerPath/dtk_ -gm $subDerPath/dwi.GradientMatrix -b 
-    $subDerPath/dwi.bval -ot nii.gz
+    $RESOURCE/toolbox/dtk/dti_recon $subDerPath/dwi.nii.gz $subDerPath/dtk_ -gm $subDerPath/dwi.GradientMatrix -b $subDerPath/dwi.bval -ot nii.gz
     #全脑纤维追踪
     $RESOURCE/toolbox/dtk/dti_tracker $subDerPath/dtk_ $subDerPath/tracks.trk -iz -m $subDerPath/dtk_fa.nii.gz 0.2 -m2 $subDerPath/b0_brain_mask.nii.gz 0.5 -it nii.gz -fact -at 45
     #平滑纤维束
     $RESOURCE/toolbox/dtk/spline_filter $subDerPath/tracks.trk 0.5 $subDerPath/tracks_filtered.trk
     rm -rf $subDerPath/dtk_*
     
-    #把灰质的模版配准到dwi图像
-    #灰质atlas非线性到t1
-    applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/AAL3v1_1mm.nii.gz --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/aal3v1.nii.gz --interp=nn
-    #t1空间的atlas线性转换到dwi空间
-    flirt -in $subDerPath/aal3v1.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/aal3v1.nii.gz -interp nearestneighbour
+    # #把灰质的模版配准到dwi图像
+    # #灰质atlas非线性到t1
+    # applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/AAL3v1_1mm.nii.gz --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/aal3v1.nii.gz --interp=nn
+    # #t1空间的atlas线性转换到dwi空间
+    # flirt -in $subDerPath/aal3v1.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/aal3v1.nii.gz -interp nearestneighbour
 
-    #生成结构网络矩阵
-    mkdir -p $subDerPath/tmp
-    cp $subDerPath/aal3v1.nii.gz $subDerPath/tmp/aal3v1.nii.gz
-    cp $subDerPath/tracks_filtered.trk $subDerPath/tmp/tracks_filtered.trk
-    cp $subDerPath/dtifit_FA.nii.gz $subDerPath/tmp/dtifit_FA.nii.gz
-    singularity exec $SIMGMATLAB matlab -batch "addpath(genpath($RESOURCE/toolbox/PANDA_1.3.1_64)); g_DeterministicNetwork('$subDerPath/tmp/tracks_filitered.trk', '$subDerPath/tmp/aal3v1.nii.gz', '$subDerPath/tmp/dtifit_FA.nii.gz');"
-    rm -rf $subDerPath/tmp
+    # #生成结构网络矩阵
+    # mkdir -p $subDerPath/tmp
+    # cp $subDerPath/aal3v1.nii.gz $subDerPath/tmp/aal3v1.nii.gz
+    # cp $subDerPath/tracks_filtered.trk $subDerPath/tmp/tracks_filtered.trk
+    # cp $subDerPath/dtifit_FA.nii.gz $subDerPath/tmp/dtifit_FA.nii.gz
+    # singularity exec $SIMGMATLAB matlab -batch "addpath(genpath($RESOURCE/toolbox/PANDA_1.3.1_64)); g_DeterministicNetwork('$subDerPath/tmp/tracks_filitered.trk', '$subDerPath/tmp/aal3v1.nii.gz', '$subDerPath/tmp/dtifit_FA.nii.gz');"
+    # rm -rf $subDerPath/tmp
 
 done

@@ -17,15 +17,15 @@ proj = '/brain/zhanjunzhang/Desktop/LIZIlin/HTN_duration'
 der = opj(proj, 'derivatives', 'ResGRETNA')
 
 # inverse length
-logging.info('Inverse length matrix')
-for i in glob(opj(der, 'Length', 'data', 'G*')):
-    tmpDstPath = opj(der, 'Length_inv', 'data')
-    if not os.path.exists(tmpDstPath):
-        os.makedirs(tmpDstPath)
-    tmpMat = np.loadtxt(i)
-    tmpNewMat = 1 / tmpMat
-    tmpNewMat[tmpMat == 0] = 0
-    np.savetxt(opj(tmpDstPath, os.path.split(i)[-1]), tmpNewMat, delimiter='\t', fmt='%.7e')
+# logging.info('Inverse length matrix')
+# for i in glob(opj(der, 'Length', 'data', 'G*')):
+#     tmpDstPath = opj(der, 'Length_inv', 'data')
+#     if not os.path.exists(tmpDstPath):
+#         os.makedirs(tmpDstPath)
+#     tmpMat = np.loadtxt(i)
+#     tmpNewMat = 1 / tmpMat
+#     tmpNewMat[tmpMat == 0] = 0
+#     np.savetxt(opj(tmpDstPath, os.path.split(i)[-1]), tmpNewMat, delimiter='\t', fmt='%.7e')
 
 # fn/length
 logging.info('FN/Length')
@@ -38,7 +38,8 @@ for i in glob(opj(der, 'Length', 'data', 'G*')):
     tmpLenMat = np.loadtxt(i)
     tmpFnMat = np.loadtxt(opj(der, 'FN', 'data', tmpFile))
     tmpNewMat = tmpFnMat / tmpLenMat
-    tmpNewMat[tmpMat == 0] = 0
+    tmpNewMat[tmpLenMat == 0] = 0
+    tmpNewMat[np.isnan(tmpNewMat)] = 0
     np.savetxt(opj(tmpDstPath, os.path.split(i)[-1]), tmpNewMat, delimiter='\t', fmt='%.7e')
     
 logging.info('Done.')

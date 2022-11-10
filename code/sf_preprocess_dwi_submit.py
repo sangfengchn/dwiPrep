@@ -51,9 +51,12 @@ def submit(templateScriptPath, jobName, ppn, queName, tmpPath, proj, rawPath, de
         logging.error('Error: ', err)
 
 if __name__ == '__main__':
+    # proj = '/brain/zhanjunzhang/Desktop/LIZIlin/HTN_duration'
+    # rawPath = opj(proj, 'bids_rawdata', 'rawdata_bnunew')
+    # derPath = opj(proj, 'derivatives', 'preprocess_dwi_bnunew')
     proj = '/brain/babri_group/Desktop/LIUChen/SES'
     rawPath = opj(proj, 'SES_BIDS')
-    derPath = opj(proj, 'derivatives')
+    derPath = opj(proj, 'derivatives', 'preprocess_dwi')
     
     tmpRoot = 'log'
     queName = 'short'
@@ -73,7 +76,7 @@ if __name__ == '__main__':
         if not os.path.exists(tmpPath):
             os.makedirs(tmpPath)
 
-        if os.path.exists(opj(derPath, subId, 'jhu-icbm-tracts.nii.gz')):
+        if os.path.exists(opj(derPath, subId, 'tracks_filtered.trk')) or (not os.path.exists(opj(rawPath, subId, 'anat'))) or (not os.path.exists(opj(rawPath, subId, 'dwi'))):
             continue
 
         submit(templateScriptPath=templateScriptPath,
