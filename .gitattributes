@@ -1,7 +1,4 @@
-resource/toolbox/* linguist-vendored
-resource/atlas/* linguist-vendored
-resource/template/* linguist-vendored
-
+resource/toolbox/PANDA_1.3.1_64/* linguist-vendored
 *.scss linguist-vendored
 *.css linguist-vendored
 *.qmd linguist-language=R
