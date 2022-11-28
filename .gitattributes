@@ -1,4 +1,7 @@
-resource/* linguist-vendored
+resource/toolbox/* linguist-vendored
+resource/atlas/* linguist-vendored
+resource/template/* linguist-vendored
+
 *.scss linguist-vendored
 *.css linguist-vendored
 *.qmd linguist-language=R
