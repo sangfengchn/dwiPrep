@@ -1,4 +1,9 @@
 resource/toolbox/PANDA_1.3.1_64/* linguist-vendored
+resource/toolbox/PANDA_1.3.1_64/FileOut/* linguist-vendored
+resource/toolbox/PANDA_1.3.1_64/NIFTI/* linguist-vendored
+resource/toolbox/PANDA_1.3.1_64/fsl_matlab/* linguist-vendored
+resource/toolbox/PANDA_1.3.1_64/psom-1.0.4/* linguist-vendored
+
 *.scss linguist-vendored
 *.css linguist-vendored
 *.qmd linguist-language=R
