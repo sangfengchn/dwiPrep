@@ -18,8 +18,9 @@ DERPATH=#DERPATH#
 RESOURCE=$PROJ/resource
 SIMGPYTHON=$RESOURCE/toolbox/envpy39.simg
 SIMGMATLAB=$RESOURCE/toolbox/matlab-r2020a.simg
-chmod +x $RESOURCE/scripts/ecclog2mat.sh
-chmod +x $RESOURCE/scripts/rotbvecs
+
+chmod +x $PROJ/code/utils/ecclog2mat.sh
+chmod +x $PROJ/code/utils/rotbvecs
 
 subPath=$RAWPATH/#SUBID#
 
@@ -41,7 +42,7 @@ subDerPath=$DERPATH/sub-$subId
 # >>>>>>>>>>>>>>>> preprocessing <<<<<<<<<<<<<<<<<<<<
 # merge run sequentially
 fslmerge -t $subDerPath/dwi.nii.gz $subPath/dwi/*.nii.gz
-singularity exec $SIMGPYTHON python $PROJ/code/util/sf_CombineGradient.py $subPath $subDerPath
+singularity exec $SIMGPYTHON python $PROJ/code/utils/sf_CombineGradient.py $subPath $subDerPath
 
 # eddy_correct & head motion correction
 eddy_correct $subDerPath/dwi.nii.gz $subDerPath/dwi.nii.gz 0
