@@ -10,6 +10,8 @@ RAWPATH=$PROJ/SES_BIDS
 DERPATH=$PROJ/derivatives/preprocess_dwi
 RESOURCE=$PROJ/resource
 SIMGPYTHON=$RESOURCE/toolbox/envpy39.simg
+chmod +x $RESOURCE/scripts/ecclog2mat.sh
+chmod +x $RESOURCE/scripts/rotbvecs
 
 # for each subject
 for subPath in `echo $RAWPATH/sub-*`
@@ -35,6 +37,9 @@ do
 
     # eddy_correct & head motion correction
     eddy_correct $subDerPath/dwi.nii.gz $subDerPath/dwi.nii.gz 0
+    $RESOURCE/scripts/ecclog2mat.sh $subDerPath/dwi.ecclog
+    $RESOURCE/scripts/rotbvecs $subDerPath/dwi.bvec $subDerPath/dwi.bvecrot $subDerPath/eddymat.list
+
     # split b0
     fslroi $subDerPath/dwi.nii.gz $subDerPath/b0.nii.gz 0 1
     #去除b0图像的非脑组织
@@ -45,7 +50,7 @@ do
     dtifit \
         -k $subDerPath/dwi.nii.gz \
         -m $subDerPath/b0_brain_mask.nii.gz \
-        -r $subDerPath/dwi.bvec \
+        -r $subDerPath/dwi.bvecrot \
         -b $subDerPath/dwi.bval \
         -o $subDerPath/dtifit \
         --sse \
