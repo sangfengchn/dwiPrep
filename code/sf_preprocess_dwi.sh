@@ -37,8 +37,8 @@ do
 
     # eddy_correct & head motion correction
     eddy_correct $subDerPath/dwi.nii.gz $subDerPath/dwi.nii.gz 0
-    $RESOURCE/scripts/ecclog2mat.sh $subDerPath/dwi.ecclog
-    $RESOURCE/scripts/rotbvecs $subDerPath/dwi.bvec $subDerPath/dwi.bvecrot $subDerPath/eddymat.list
+    $PROJ/code/utils/ecclog2mat.sh $subDerPath/dwi.ecclog
+    $PROJ/code/utils/rotbvecs $subDerPath/dwi.bvec $subDerPath/dwi.bvecrot $subDerPath/eddymat.list
 
     # split b0
     fslroi $subDerPath/dwi.nii.gz $subDerPath/b0.nii.gz 0 1

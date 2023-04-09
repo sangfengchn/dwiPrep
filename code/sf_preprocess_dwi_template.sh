@@ -46,10 +46,10 @@ singularity exec $SIMGPYTHON python $PROJ/code/utils/sf_CombineGradient.py $subP
 
 # eddy_correct & head motion correction
 eddy_correct $subDerPath/dwi.nii.gz $subDerPath/dwi.nii.gz 0
-$RESOURCE/scripts/ecclog2mat.sh $subDerPath/dwi.ecclog
-$RESOURCE/scripts/rotbvecs $subDerPath/dwi.bvec $subDerPath/dwi.bvecrot $subDerPath/eddymat.list
+$PROJ/code/utils/ecclog2mat.sh $subDerPath/dwi.ecclog
+$PROJ/code/utils/rotbvecs $subDerPath/dwi.bvec $subDerPath/dwi.bvecrot $subDerPath/eddymat.list
 
-z# split b0
+# split b0
 fslroi $subDerPath/dwi.nii.gz $subDerPath/b0.nii.gz 0 1
 #去除b0图像的非脑组织
 bet $subDerPath/b0.nii.gz $subDerPath/b0_brain -m -f 0.2
