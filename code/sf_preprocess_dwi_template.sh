@@ -58,7 +58,7 @@ bet $subDerPath/b0.nii.gz $subDerPath/b0_brain -m -f 0.2
 dtifit \
     -k $subDerPath/dwi.nii.gz \
     -m $subDerPath/b0_brain_mask.nii.gz \
-    -r $subDerPath/dwi.bvec \
+    -r $subDerPath/dwi.bvecrot \
     -b $subDerPath/dwi.bval \
     -o $subDerPath/dtifit \
     --sse \
