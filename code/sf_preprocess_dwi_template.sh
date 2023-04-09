@@ -18,6 +18,8 @@ DERPATH=#DERPATH#
 RESOURCE=$PROJ/resource
 SIMGPYTHON=$RESOURCE/toolbox/envpy39.simg
 SIMGMATLAB=$RESOURCE/toolbox/matlab-r2020a.simg
+chmod +x $RESOURCE/scripts/ecclog2mat.sh
+chmod +x $RESOURCE/scripts/rotbvecs
 
 subPath=$RAWPATH/#SUBID#
 
@@ -43,7 +45,10 @@ singularity exec $SIMGPYTHON python $PROJ/code/util/sf_CombineGradient.py $subPa
 
 # eddy_correct & head motion correction
 eddy_correct $subDerPath/dwi.nii.gz $subDerPath/dwi.nii.gz 0
-# split b0
+$RESOURCE/scripts/ecclog2mat.sh $subDerPath/dwi.ecclog
+$RESOURCE/scripts/rotbvecs $subDerPath/dwi.bvec $subDerPath/dwi.bvecrot $subDerPath/eddymat.list
+
+z# split b0
 fslroi $subDerPath/dwi.nii.gz $subDerPath/b0.nii.gz 0 1
 #去除b0图像的非脑组织
 bet $subDerPath/b0.nii.gz $subDerPath/b0_brain -m -f 0.2
