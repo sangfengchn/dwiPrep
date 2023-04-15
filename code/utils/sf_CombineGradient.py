@@ -6,11 +6,9 @@ import sys
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-# subPath = os.path.abspath(sys.argv[1])
-# subDerPath = os.path.abspath(sys.argv[2])
-subPath = os.path.abspath('test/sub-44JIANGHONGXIAN')
-subDerPath = os.path.abspath('test/der/')
-# logging.info(subPath)
+subPath = os.path.abspath(sys.argv[1])
+subDerPath = os.path.abspath(sys.argv[2])
+logging.info(subPath)
 
 # combine bval
 bval = []

@@ -2,16 +2,17 @@
 set -exu
 # set -u
 
-# PROJ=/Users/fengsang/Library/CloudStorage/OneDrive-mail.bnu.edu.cn/Learning/L_task-dmri
-# PROJ=/home/feng/Desktop/Projects/L_task-dmri
-# PROJ=/brain/zhanjunzhang/Desktop/LIZIlin/HTN_duration/derivatives
-PROJ=/brain/babri_group/Desktop/LIUChen/SES
-RAWPATH=$PROJ/SES_BIDS
+PROJ=/brain/zhanjunzhang/Desktop/LIZIlin/HTN_duration_multiple_network
+RAWPATH=$PROJ/rawdata
 DERPATH=$PROJ/derivatives/preprocess_dwi
 RESOURCE=$PROJ/resource
 SIMGPYTHON=$RESOURCE/toolbox/envpy39.simg
+SIMGMATLAB=$RESOURCE/toolbox/matlab-r2020a.simg
 chmod +x $PROJ/code/utils/ecclog2mat.sh
 chmod +x $PROJ/code/utils/rotbvecs
+chmod +x $RESOURCE/toolbox/dtk/dti_recon
+chmod +x $RESOURCE/toolbox/dtk/dti_tracker
+chmod +x $RESOURCE/toolbox/dtk/spline_filter
 
 # for each subject
 for subPath in `echo $RAWPATH/sub-*`
@@ -26,8 +27,8 @@ do
 
     # mkdir derivatives folder
     subDerPath=$DERPATH/sub-$subId
-    # [ -d $subDerPath ] && continue
-    [ -f $subDerPath/tracks_filtered.trk ] && continue
+    [ -d $subDerPath ] && continue
+    # [ -f $subDerPath/tracks_filtered.trk ] && continue
     [ ! -d $subDerPath ] && mkdir -p $subDerPath
 
     # >>>>>>>>>>>>>>>> preprocessing <<<<<<<<<<<<<<<<<<<<
@@ -95,27 +96,27 @@ do
     # dti measures to mni for vbm
     #应用上面线形及非线形的转换参数，将dti measures转换到标准空间（vbm）
     # fa线形转换到t1
-    flirt -in $subDerPath/dtifit_FA.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/dtifit_FA_mni.nii.gz
+    # flirt -in $subDerPath/dtifit_FA.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/dtifit_FA_mni.nii.gz
     #fa通过t1非线形转换到mni
-    applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/dtifit_FA_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/dtifit_FA_mni.nii.gz
+    # applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/dtifit_FA_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/dtifit_FA_mni.nii.gz
     # MD
-    flirt -in $subDerPath/dtifit_MD.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/dtifit_MD_mni.nii.gz
-    applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/dtifit_MD_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/dtifit_MD_mni.nii.gz
+    # flirt -in $subDerPath/dtifit_MD.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/dtifit_MD_mni.nii.gz
+    # applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/dtifit_MD_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/dtifit_MD_mni.nii.gz
 
-    flirt -in $subDerPath/dtifit_L1.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/dtifit_L1_mni.nii.gz
-    applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/dtifit_L1_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/dtifit_L1_mni.nii.gz
+    # flirt -in $subDerPath/dtifit_L1.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/dtifit_L1_mni.nii.gz
+    # applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/dtifit_L1_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/dtifit_L1_mni.nii.gz
 
-    flirt -in $subDerPath/dtifit_RD.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/dtifit_RD_mni.nii.gz
-    applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/dtifit_RD_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/dtifit_RD_mni.nii.gz
+    # flirt -in $subDerPath/dtifit_RD.nii.gz -ref $subDerPath/t1w_brain.nii.gz -applyxfm -init $subDerPath/dwi2t1w.mat -out $subDerPath/dtifit_RD_mni.nii.gz
+    # applywarp --ref=$RESOURCE/template/MNI152_T1_1mm_brain.nii.gz --in=$subDerPath/dtifit_RD_mni.nii.gz --warp=$subDerPath/t1w2mniWarp.nii.gz --out=$subDerPath/dtifit_RD_mni.nii.gz
 
     # transform atlas into dwi space for roi-based analysis
     #将atlas非线形转换到t1
-    applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/JHU-ICBM-labels-1mm.nii.gz --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/jhu-icbm-labels.nii.gz --interp=nn
+    # applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/JHU-ICBM-labels-1mm.nii.gz --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/jhu-icbm-labels.nii.gz --interp=nn
     #将t1空间的atlas转换到dwi空间
-    flirt -in $subDerPath/jhu-icbm-labels.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/jhu-icbm-labels.nii.gz -interp nearestneighbour
+    # flirt -in $subDerPath/jhu-icbm-labels.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/jhu-icbm-labels.nii.gz -interp nearestneighbour
     #应用另一个atlas
-    applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/JHU-ICBM-tracts-maxprob-thr25-1mm.nii.gz --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/jhu-icbm-tracts.nii.gz --interp=nn
-    flirt -in $subDerPath/jhu-icbm-tracts.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/jhu-icbm-tracts.nii.gz -interp nearestneighbour
+    # applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/JHU-ICBM-tracts-maxprob-thr25-1mm.nii.gz --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/jhu-icbm-tracts.nii.gz --interp=nn
+    # flirt -in $subDerPath/jhu-icbm-tracts.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/jhu-icbm-tracts.nii.gz -interp nearestneighbour
 
 
     # # # >>>>>>>>>>>>>>>>>>> free water <<<<<<<<<<<<<<<<<
@@ -140,18 +141,26 @@ do
     $RESOURCE/toolbox/dtk/spline_filter $subDerPath/tracks.trk 0.5 $subDerPath/tracks_filtered.trk
     rm -rf $subDerPath/dtk_*
     
-    # #把灰质的模版配准到dwi图像
-    # #灰质atlas非线性到t1
-    # applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/AAL3v1_1mm.nii.gz --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/aal3v1.nii.gz --interp=nn
-    # #t1空间的atlas线性转换到dwi空间
-    # flirt -in $subDerPath/aal3v1.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/aal3v1.nii.gz -interp nearestneighbour
+    #把灰质的模版配准到dwi图像
+    #灰质atlas非线性到t1
+    applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/AAL_brain.nii.gz --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/AAL_brain.nii.gz --interp=nn
+    #t1空间的atlas线性转换到dwi空间
+    flirt -in $subDerPath/AAL_brain.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/AAL_brain.nii.gz -interp nearestneighbour
+    applywarp --ref=$subDerPath/t1w_brain.nii.gz --in=$RESOURCE/atlas/BN_Atlas_246_1mm.nii --warp=$subDerPath/mni2t1wWarp.nii.gz --out=$subDerPath/BN_Atlas_246_1mm.nii.gz --interp=nn
+    flirt -in $subDerPath/BN_Atlas_246_1mm.nii.gz -ref $subDerPath/b0_brain.nii.gz -applyxfm -init $subDerPath/t1w2dwi.mat -out $subDerPath/BN_Atlas_246_1mm.nii.gz -interp nearestneighbour
 
-    # #生成结构网络矩阵
-    # mkdir -p $subDerPath/tmp
-    # cp $subDerPath/aal3v1.nii.gz $subDerPath/tmp/aal3v1.nii.gz
-    # cp $subDerPath/tracks_filtered.trk $subDerPath/tmp/tracks_filtered.trk
-    # cp $subDerPath/dtifit_FA.nii.gz $subDerPath/tmp/dtifit_FA.nii.gz
-    # singularity exec $SIMGMATLAB matlab -batch "addpath(genpath($RESOURCE/toolbox/PANDA_1.3.1_64)); g_DeterministicNetwork('$subDerPath/tmp/tracks_filitered.trk', '$subDerPath/tmp/aal3v1.nii.gz', '$subDerPath/tmp/dtifit_FA.nii.gz');"
-    # rm -rf $subDerPath/tmp
-
+    #生成结构网络矩阵
+    mkdir -p $subDerPath/tmp
+    cp $subDerPath/AAL_brain.nii.gz $subDerPath/tmp/AAL_brain.nii.gz
+    cp $subDerPath/tracks_filtered.trk $subDerPath/tmp/tracks_filtered.trk
+    cp $subDerPath/dtifit_FA.nii.gz $subDerPath/tmp/dtifit_FA.nii.gz
+    matlab -r "restoredefaultpath; addpath(genpath('$RESOURCE/toolbox/PANDA_1.3.1_64')); g_DeterministicNetwork('$subDerPath/tmp/tracks_filtered.trk', '$subDerPath/tmp/AAL_brain.nii.gz', '$subDerPath/tmp/dtifit_FA.nii.gz'); exit;"
+    rm -rf $subDerPath/tmp
+    
+    mkdir -p $subDerPath/tmp
+    cp $subDerPath/BN_Atlas_246_1mm.nii.gz $subDerPath/tmp/BN_Atlas_246_1mm.nii.gz
+    cp $subDerPath/tracks_filtered.trk $subDerPath/tmp/tracks_filtered.trk
+    cp $subDerPath/dtifit_FA.nii.gz $subDerPath/tmp/dtifit_FA.nii.gz
+    matlab -r "restoredefaultpath; addpath(genpath('$RESOURCE/toolbox/PANDA_1.3.1_64')); g_DeterministicNetwork('$subDerPath/tmp/tracks_filtered.trk', '$subDerPath/tmp/BN_Atlas_246_1mm.nii.gz', '$subDerPath/tmp/dtifit_FA.nii.gz'); exit;"
+    rm -rf $subDerPath/tmp
 done
