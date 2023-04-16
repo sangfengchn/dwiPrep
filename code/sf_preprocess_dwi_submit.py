@@ -51,11 +51,8 @@ def submit(templateScriptPath, jobName, ppn, queName, tmpPath, proj, rawPath, de
         logging.error('Error: ', err)
 
 if __name__ == '__main__':
-    # proj = '/brain/zhanjunzhang/Desktop/LIZIlin/HTN_duration'
-    # rawPath = opj(proj, 'bids_rawdata', 'rawdata_bnunew')
-    # derPath = opj(proj, 'derivatives', 'preprocess_dwi_bnunew')
-    proj = '/brain/babri_group/Desktop/LIUChen/SES'
-    rawPath = opj(proj, 'SES_BIDS')
+    proj = '/brain/zhanjunzhang/Desktop/LIZIlin/HTN_duration_multiple_network'
+    rawPath = opj(proj, 'rawdata')
     derPath = opj(proj, 'derivatives', 'preprocess_dwi')
     
     tmpRoot = 'log'
@@ -89,3 +86,5 @@ if __name__ == '__main__':
             derPath=derPath,
             subId=subId)
         time.sleep(2)
+        
+    logging.info("Submit done.")
