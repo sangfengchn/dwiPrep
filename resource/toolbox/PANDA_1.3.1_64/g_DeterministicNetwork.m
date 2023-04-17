@@ -218,8 +218,12 @@ for i=1:size(f.fiber,2)
     TP_2(i,1:3)=f.fiber(i).xyzFiberCoord(end,:);
     Length_Matrix_Fiber(i,1)=sum(sqrt(sum((Fibers{i}(1:end-1,:).*repmat(Voxel_size(1,:),(length(Fibers{i})-1),1)-Fibers{i}(2:end,:).*repmat(Voxel_size(1,:),(length(Fibers{i})-1),1)).^2,2)));
     MP=floor(f.fiber(i).xyzFiberCoord(:,:)+1);
+
+    % update by sangfeng
     tmpMP = any(MP <= 0, 2);
-    MP(tmpMP) = [];
+    MP(tmpMP, :) = [];
+    f.fiber(i).nFiberLength = f.fiber(i).nFiberLength - sum(tmpMP);
+
     MP_Index=sub2ind(size(Atlas), MP(:,1),MP(:,2),MP(:,3));
     FA_SumAndVoxel_Fiber(i,1)=sum(FA_Matrix(MP_Index));
     FA_SumAndVoxel_Fiber(i,2)=length(MP_Index);
