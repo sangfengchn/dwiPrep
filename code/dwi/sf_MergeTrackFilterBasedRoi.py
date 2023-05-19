@@ -15,8 +15,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 
 proj = "."
 der = opj(proj, "derivatives", "preprocess_dwi")
-# 测试用，具体需要待会儿跟栗子确认
-roiIndex = 16
 
 resDf = pd.DataFrame()
 for i in glob(opj(der, "sub-*", "TracksMeasure*.csv")):
@@ -29,7 +27,7 @@ for i in glob(opj(der, "sub-*", "TracksMeasure*.csv")):
     subDf = pd.read_csv(i, header=0)
     subDf["SUBID"] = subId
     subDf["Measure"] = tmpMea.replace("mea-", "")
-    subDf["ROI"] = tmpMea.replace(".csv", "").replace("roi-", "")
+    subDf["ROI"] = tmpRoi.replace(".csv", "").replace("roi-", "")
     
     resDf = pd.concat([resDf, subDf])
     
