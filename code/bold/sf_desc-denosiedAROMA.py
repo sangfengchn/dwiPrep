@@ -51,7 +51,6 @@ for i in glob.glob(os.path.join(derRoot, 'sub-*')):
         if total_time == 240:
             tmpData = image.index_img(tmpData, slice(remove_time, total_time))
             tmpConfound = tmpConfound.tail(total_time - remove_time)
-
             tmpDataDenoised = image.clean_img(tmpData, confounds=tmpConfound, detrend=False, standardize=False)
         elif total_time == 230:
             tmpDataDenoised = image.clean_img(tmpData, confounds=tmpConfound, detrend=False, standardize=False)

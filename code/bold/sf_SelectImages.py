@@ -8,32 +8,25 @@
 
 import os
 from os.path import join as opj
-import re
-import pandas as pd
 import shutil
+import pandas as pd
 import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 
-der = "derivatives/fmriprep"
+der = "./derivatives/fmriprep"
+dst = "./toLZL/fmriprep"
+if not os.path.exists(dst): os.makedirs(dst)
 
-df = pd.read_csv("sourcedata/participants.csv", header=0)
-df = df.set_index("OLDID")
-df = df.loc[df.Site == "BNUOLD"]
-logging.info(df.head())
+df = pd.read_csv("./sourcedata/participants.csv", header=0, index_col=3)
+newDf = pd.read_csv("./subinfo_toLZL.csv", header=0, index_col=0)
+for i in df.index.values:
+    subMriId = df.loc[i, "OLDID"]
+    if subMriId in newDf.index.values:
+        logging.info(subMriId)
+        subSrcPath = opj(der, i, "func")
+        subDstPath = opj(dst, i)
+        if not os.path.exists(subDstPath): os.makedirs(subDstPath)
+        subDstPath = opj(subDstPath, "func")
+        shutil.copytree(subSrcPath, subDstPath)
 
-newDf = pd.read_excel("all_beh_686.xlsx", header=0, index_col=0)
-logging.info(newDf)
-
-for i in newDf.index.values:
-    subNewId = df.loc[i, "participant_id"]
-    if not os.path.exists(opj(der, subNewId, "func")):
-        logging.info(f"OLDID {i}, NEWID {subNewId}")
-
-# for i in os.listdir(der):
-#     subOldId = re.sub(r"[A-Za-z]", "", i.replace(".tar.gz", ""))
-#     subOldId = f"sub-BNU{subOldId}"
-#     subNewId = df.loc[subOldId, "participant_id"]
-#     shutil.copy(opj(der, i), opj("append", f"{subNewId}.tar.gz"))
-
-logging.info("Done.")
-
+logging.info("Done")
