@@ -19,21 +19,25 @@ logging.basicConfig(level=logging.DEBUG)
 proj = '.'
 der = opj(proj, 'toLZL', 'cat')
 # meaPrefix = 'GM'
-atlasName = 'AAL_brain_2mm.nii.gz'
+atlasName = 'AAL_brain.nii.gz'
 atlasInfo = pd.read_csv('AAL_brain.csv', header=0, index_col=0)
-resultPath = opj(proj, 'toLZL', 'GMV_AAL_brain.csv')
+atlasData = nib.load(opj(proj, atlasName)).get_fdata()
 
+resultPath = opj(proj, 'toLZL', 'GMV_AAL_brain.csv')
 result = pd.DataFrame()
 for subPath in sorted(glob(opj(der, 'sub-*'))):
     subId = os.path.split(subPath)[-1]
     logging.info(subId)
     
-    subAtlasData = nib.load(opj(proj, 'atlas', atlasName)).get_fdata()
-    subMeaData = nib.load(opj(subPath, 'mri', f'{subId}_T1w.nii')).get_fdata()
+    subMeaData = nib.load(opj(subPath, 'mri', f'smwp1{subId}_T1w.nii')).get_fdata()
     subRow = {'subid': [subId]}
     for idxRegion in atlasInfo.index.values:
-        logging.info(idxRegion)
-        subRow[atlasInfo.loc[idxRegion, 'Abbr']] = [np.nansum(subMeaData[subAtlasData==idxRegion])]
+        # logging.info(idxRegion)
+        subRow[atlasInfo.loc[idxRegion, 'Name']] = [np.nansum(subMeaData[atlasData==idxRegion])]
+    with open(opj(subPath, "report", "TIV.txt"), "r") as f:
+        lines = f.readlines()
+    subRow["TIV"] = (lines[0].split())[0]
+    logging.info(subRow)
     result = pd.concat([result, pd.DataFrame(subRow)])
     # break
     

@@ -17,18 +17,18 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 proj = "/brain/babri_in/sangf/Data/D_desc-babri"
 der = opj(proj, "toLZL", "fmriprep")
 
-atlasPath = opj(proj, "resource", "atlas", "AAL_brain_2mm.nii.gz")
+atlasPath = opj(proj, "AAL_brain_2mm.nii.gz")
 atlasImg = nib.load(atlasPath) 
 atlasImgData = atlasImg.get_fdata()
 roiIndex = 15
 
-for i in glob(opj(der, "sub-*", "func", "*space-MNI152NLin6Asym_desc-denosied_bold.nii.gz")):
-    if (os.path.exists(i.replace(".nii.gz", ".log")) or
-        os.path.exists(i.replace("desc-denosied", f"desc-zfc_roi-{roiIndex}"))):
+for tmpPath in glob(opj(der, "sub-*", "func", "*space-MNI152NLin6Asym_desc-denosied_bold.nii.gz")):
+    if (os.path.exists(tmpPath.replace(".nii.gz", f".fc{roiIndex}.log")) or
+        os.path.exists(tmpPath.replace("desc-denosied", f"desc-zfc_roi-{roiIndex}"))):
         continue
-    with open(i.replace(".nii.gz", ".log"), "w") as f: f.writelines("")
-    logging.info(i)
-    tmpImg = nib.load(i)
+    with open(tmpPath.replace(".nii.gz", f".fc{roiIndex}.log"), "w") as f: f.writelines("")
+    logging.info(tmpPath)
+    tmpImg = nib.load(tmpPath)
     tmpImgData = tmpImg.get_fdata()
     dims = tmpImgData.shape
 
@@ -46,7 +46,7 @@ for i in glob(opj(der, "sub-*", "func", "*space-MNI152NLin6Asym_desc-denosied_bo
                 tmpCorrMat[i, j, k] = tmpCorrcoef[0, 1]
     tmpCorrMat[np.isnan(tmpCorrMat)] = 0
     tmpCorrMatZ = (np.log(1 + tmpCorrMat) - np.log(1 - tmpCorrMat)) / 2
-    nib.save(nib.Nifti1Image(tmpCorrMat, tmpImg.affine), i.replace("desc-denosied", f"desc-fc_roi-{roiIndex}"))
-    nib.save(nib.Nifti1Image(tmpCorrMatZ, tmpImg.affine), i.replace("desc-denosied", f"desc-zfc_roi-{roiIndex}"))
+    nib.save(nib.Nifti1Image(tmpCorrMat, tmpImg.affine), tmpPath.replace("desc-denosied", f"desc-fc_roi-{roiIndex}"))
+    nib.save(nib.Nifti1Image(tmpCorrMatZ, tmpImg.affine), tmpPath.replace("desc-denosied", f"desc-zfc_roi-{roiIndex}"))
     
 logging.info("Done.")
