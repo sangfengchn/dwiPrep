@@ -1,0 +1,39 @@
+{
+    "descriptions": [
+        {
+        "dataType": "anat",
+        "modalityLabel": "T1w",
+        "criteria": {
+            "SidecarFilename": "*t1_mprage_sag_tr1900*",
+			"SeriesDescription": "t1_mprage_sag_tr1900"
+            }
+        },
+		{
+		"dataType": "func",
+		"modalityLabel": "bold",
+		"customLabels": "task-rest",
+		"criteria": {
+			"SidecarFilename": "*ge_func_31x31x35_240_RS*",
+			"SeriesDescription": "ge_func_31x31x35_240_RS"
+			}
+		},
+		{
+		"dataType": "dwi",
+		"modalityLabel": "dwi",
+		"criteria": {
+			"SidecarFilename": "*DTI_30_2x2x2_128x128_b1000_p2*",
+			"SeriesDescription": "DTI_30_2x2x2_128x128_b1000_p2"
+			}
+		},
+		{
+		"dataType": "func",
+		"modalityLabel": "bold",
+		"customLabels": "task-nback",
+		"criteria": {
+			"ProtocolName": "ge_func_3x3x3p5_235",
+			"SeriesDescription": "ge_func_3x3x3p5_235"
+			}
+		}
+    ]
+}
+
